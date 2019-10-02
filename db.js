@@ -16,7 +16,8 @@ const Page = conn.define('page', {
   parentId: {
     primaryKey: true,
     type: Sequelize.UUID,
-    defaultValue: Sequelize.UUIDV4
+    defaultValue: Sequelize.UUIDV4,
+    allowNull: true
   }
 });
 
@@ -25,7 +26,7 @@ Page.findHomePage = function(){
 }
 
 Page.prototype.findChildren = function () {
-  return this.findAll({ where: {parentId: home.id }})
+  return Page.findAll({ where: {parentId: this.id }})
 }
 
 const mapAndSave = (pages) => Promise.all(pages.map( page => Page.create(page)));
