@@ -20,6 +20,14 @@ const Page = conn.define('page', {
   }
 });
 
+Page.findHomePage = function(){
+  return this.findOne({ where: {title: 'Home Page'}});
+}
+
+Page.prototype.findChildren = function () {
+  return this.findAll({ where: {parentId: home.id }})
+}
+
 const mapAndSave = (pages) => Promise.all(pages.map( page => Page.create(page)));
 
 const syncAndSeed = async() => {
