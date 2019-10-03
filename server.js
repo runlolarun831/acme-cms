@@ -1,14 +1,22 @@
 const express = require('express');
 const db = require('./db');
-const path = require('path');
+const {Page} = db.models;
 
 const app = express();
 
 const port = process.env.PORT || 3000;
 
-app.get('/', (req, res, next) => res.sendFile(path.join(__dirname, 'index.html')));
+app.get('/api/pages', async (req, res, next) => {
+  try {
+    res.send( await Page.findAll());
+  }
+  catch(ex){
+    next(ex);
+  }
+});
 
-app.use('/api', require('./api'));
+
+
 
 db.syncAndSeed()
   .then(() => app.listen(port, () => console.log(`listening on port ${port}`)));

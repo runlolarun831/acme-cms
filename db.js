@@ -29,6 +29,26 @@ Page.prototype.findChildren = function () {
   return Page.findAll({ where: {parentId: this.id }})
 }
 
+// Page.prototype.hierarchy = function () {
+//   return Page.findAll({where: {parentId: this.parentId }})//[ 'Phone', 'Fax' ]
+// };
+
+Page.prototype.hierarchy = function () {
+  return Page.findAll( {
+    //where: {parentId: this.parentId },
+    include: [{
+     model: Page,
+     as: 'parents',
+     where: {title: this.title, parentId: this.id }
+    }]
+})
+}
+// Page.prototype.hierarchy = function () {
+//   return hierarchy(Page.findAll({where: { where: { id: this.parentId }}}))//
+// };
+Page.belongsTo(Page, {as: 'parent'});
+Page.hasMany(Page, {as: 'parents', foreignKey: 'parentId'});
+
 const mapAndSave = (pages) => Promise.all(pages.map( page => Page.create(page)));
 
 const syncAndSeed = async() => {
@@ -49,7 +69,7 @@ const syncAndSeed = async() => {
 };
 
 syncAndSeed()
-  .then(async()=> {
+  .then(async() => {
     const home = await Page.findHomePage();
     console.log(home.title); //Home Page
     const homeChildren = await home.findChildren();
@@ -59,8 +79,14 @@ syncAndSeed()
     //hierarch returns the page, parentPage, parent's Parent... etc..
     let hier = await fax.hierarchy();
     console.log(hier.map( page => page.title)); //['Fax', 'Contact', 'Home']
-    const history = await Page.findOne({ where: {title: 'About Our HIstory' }});
+    const history = await Page.findOne({ where: {title: 'About Our History' }});// fixed typo to lwrcase i
     hier = await history.hierarchy();
     console.log(hier.map( page => page.title));//[ 'About Our History', 'About', 'Home Page' ]
   });
 
+module.exports = {
+  syncAndSeed,
+  models: {
+    Page
+  }
+}

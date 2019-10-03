@@ -1,9 +1,9 @@
 Xrepo acme-cms
 Xadd db.js file
-Xcreate the model which will get the code below to work as expected
+create the model which will get the code below to work as expected
 (note the hierarchy method is tricky and you don't need it for the routes)<---WORKING ON THIS
-add server.js file
-add route for /api/pages which will return all pages
+Xadd server.js file
+Xadd route for /api/pages which will return all pages
 add route for /api/pages/:id/children which will return the child pages for a page with passed in id
 add route for /api/pages/:id/siblings which will return the siblings for a given passed in id
 
@@ -13,11 +13,11 @@ Prof notes- no react
 
 just express and sequelize
 
-myNote
+myNotes
 
 make a model
 make methods???
--findHomePage() //class <---WORKING ON THIS
--findChildren()
--findOne()   I think this is a built-in funct
--hierarchy() instance
+X-findHomePage() //class method
+X-findChildren()  //instance method
+X-findOne()   I think this is a built-in funct
+-hierarchy() instance<---WORKING ON THIS
