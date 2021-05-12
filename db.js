@@ -21,27 +21,33 @@ const Page = conn.define('page', {
   }
 });
 
+//works
 Page.findHomePage = function(){
   return this.findOne({ where: {title: 'Home Page'}});
 }
-
+//works
 Page.prototype.findChildren = function () {
   return Page.findAll({ where: {parentId: this.id }})
 }
+//test
+ Page.prototype.hierarchy = function () {
+   return Page.findAll({where: {parentId: this.parentId }})//[ 'Phone', 'Fax' ]
+ };
+
+ Page.prototype.hierarchy = function () {
+  return Page.findAll({where: {parentId: this.parentId }})
+};
 
 // Page.prototype.hierarchy = function () {
-//   return Page.findAll({where: {parentId: this.parentId }})//[ 'Phone', 'Fax' ]
-// };
+//   return Page.findAll( {
+//     //where: {parentId: this.parentId },
+//     include: [{
+//      model: Page,
+//      as: 'parents',
+//      where: { id: this.ParentId.parentId}
+//     }]
+// })
 
-Page.prototype.hierarchy = function () {
-  return Page.findAll( {
-    //where: {parentId: this.parentId },
-    include: [{
-     model: Page,
-     as: 'parents',
-     where: {title: this.title, parentId: this.id }
-    }]
-})
 }
 // Page.prototype.hierarchy = function () {
 //   return hierarchy(Page.findAll({where: { where: { id: this.parentId }}}))//
